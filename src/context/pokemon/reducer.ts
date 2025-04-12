@@ -72,6 +72,8 @@ const reducer = (state: PokemonState, action: PokemonAction): PokemonState => {
             : b.name.localeCompare(a.name)
         );
       }
+      const pageCount = Math.ceil(pageData.length / 10);
+      const totalData = pageData.length;
       if (page) {
         pageData =
           pageData.length <= 0 ? state.allData?.results || [] : pageData;
@@ -81,8 +83,8 @@ const reducer = (state: PokemonState, action: PokemonAction): PokemonState => {
         ...state,
         currentPageData: pageData || [],
         pagination: {
-          pageCount: Math.ceil(pageData.length / 10),
-          totalData: pageData.length,
+          pageCount,
+          totalData,
           page: page || 1,
         },
       };
