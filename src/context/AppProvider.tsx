@@ -4,21 +4,29 @@ import { PokemonAction } from "./pokemon/reducer";
 import { pokemonIntialState, pokemonReducer } from "./pokemon";
 import { PokemonState } from "./pokemon/state";
 import { AppContext } from "./AppContext";
+import { configReducer } from "./config";
+import { ConfigReducerAction } from "./config/reducer";
+import configInitialState, { ConfigState } from "./config/state";
 
-const initialState = {
+export type State = {
+  pokemon: PokemonState;
+  config: ConfigState;
+};
+
+const initialState: State = {
   pokemon: pokemonIntialState,
+  config: configInitialState,
 };
 
 type Props = {
   children: ReactNode;
 };
 
-export type State = {
-  pokemon: PokemonState;
-};
+export type CombinedReducerAction = PokemonAction | ConfigReducerAction;
 
-const rootReducer = combineReducers<State, PokemonAction>({
+const rootReducer = combineReducers<State, CombinedReducerAction>({
   pokemon: pokemonReducer,
+  config: configReducer,
 });
 
 function AppProvider({ children }: Props) {

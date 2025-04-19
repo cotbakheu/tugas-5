@@ -3,6 +3,7 @@ import {
   PokemonDetails,
   PokemonListData,
 } from "../../type/pokemon";
+import { CombinedReducerAction } from "../AppProvider";
 import { PokemonState } from "./state";
 
 export type SetDataPage = {
@@ -27,12 +28,10 @@ export type UpdateAction = {
 
 export type PokemonAction = UpdateAction | SetAllData | SetDataPage;
 
-export type PokemonReducer = (
+const reducer = (
   state: PokemonState,
-  action: PokemonAction
-) => PokemonState;
-
-const reducer = (state: PokemonState, action: PokemonAction): PokemonState => {
+  action: CombinedReducerAction
+): PokemonState => {
   switch (action.type) {
     case "SET_POKEMON_DETAIL":
       return {

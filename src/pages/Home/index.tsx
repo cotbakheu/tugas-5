@@ -5,6 +5,7 @@ import { getAllPokemon } from "../../api/pokemon";
 import { GetAllPokemonResponse } from "../../type/pokemon";
 import { useAppContext } from "../../context/AppContext";
 import { useSearchParams } from "react-router";
+import { PageViewType } from "../../type/global";
 
 function Home() {
   const [searchParams] = useSearchParams();
@@ -28,6 +29,8 @@ function Home() {
         offset: 200,
       });
       dispatch({ type: "SET_POKEMON_DATA", payload: response });
+      localStorage.setItem("pokeList", JSON.stringify(response));
+
       handleSetPageData();
     } catch (error) {
       setErrorGetAllData(error as string);
@@ -56,6 +59,15 @@ function Home() {
   useEffect(() => {
     handleSetPageData();
   }, [page, sort, order, type, search]);
+
+  useEffect(() => {
+    dispatch({
+      type: "SET_PAGE_VIEW",
+      payload: {
+        pageView: localStorage.getItem("pageView") as PageViewType,
+      },
+    });
+  }, []);
 
   return (
     <main className="px-4 py-6 md:px-20">

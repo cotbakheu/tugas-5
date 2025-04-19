@@ -16,12 +16,11 @@ type ListDisplayerProps = {
 };
 
 const ListDisplayer = ({ data }: ListDisplayerProps) => {
-  const { dispatch } = useAppContext();
+  const { dispatch, state } = useAppContext();
+  const { pageView } = state.config;
 
   const [pokemonDetailData, setPokemonDetailData] =
     useState<PokemonDetails | null>(null);
-  const [searchParams] = useSearchParams();
-  const type = searchParams.get("type");
 
   const handleGetDetailPokemon = async () => {
     try {
@@ -46,7 +45,7 @@ const ListDisplayer = ({ data }: ListDisplayerProps) => {
       onClick={handleUpdateDetailPokemon}
       className={classNames(
         "sm:w-1/2 md:w-1/4 lg:w-1/6 ",
-        type === "single" ? "w-full" : "w-[48%]"
+        pageView === "single" ? "w-full" : "w-[48%]"
       )}
       to={`/pokemon/${data.name}`}
     >

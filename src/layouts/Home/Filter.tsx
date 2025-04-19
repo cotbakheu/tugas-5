@@ -2,9 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { InputSelect, Option } from "../../components/Input";
 import { useSearchParams } from "react-router";
 import classNames from "classnames";
+import { useAppContext } from "../../context/AppContext";
+import { PageViewType } from "../../type/global";
 
 function Filter() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { state, dispatch } = useAppContext();
+  const { pageView } = state.config;
+
   const [sortOption] = useState<Option[]>([
     {
       label: "Name ASC",
@@ -25,7 +30,6 @@ function Filter() {
         order: "asc",
         sort: "name",
         page: "1",
-        type: "single",
         search: "",
       });
     }
@@ -48,10 +52,13 @@ function Filter() {
     return `${sort} ${order}`;
   }, [sort, order]);
 
-  const handleChangeType = (type: "single" | "multiple") => {
-    setSearchParams({
-      ...Object.fromEntries(searchParams),
-      type: type,
+  const handleChangeType = (type: PageViewType) => {
+    localStorage.setItem("pageView", type);
+    dispatch({
+      type: "SET_PAGE_VIEW",
+      payload: {
+        pageView: type,
+      },
     });
   };
 
@@ -72,9 +79,7 @@ function Filter() {
             onClick={() => handleChangeType("single")}
             className={classNames(
               "bg-dark p-2 flex justify-center items-center w-14",
-              searchParams.get("type") === "single"
-                ? "bg-dark"
-                : "bg-secondary-background"
+              pageView === "single" ? "bg-dark" : "bg-secondary-background"
             )}
           >
             <img src="/icons/block.svg" alt="block" />
@@ -83,9 +88,7 @@ function Filter() {
             onClick={() => handleChangeType("multiple")}
             className={classNames(
               "border-l border-light-grey rounded-r-lg flex justify-center items-center p-2 w-14",
-              searchParams.get("type") === "multiple"
-                ? "bg-dark"
-                : "bg-secondary-background"
+              pageView === "multiple" ? "bg-dark" : "bg-secondary-background"
             )}
           >
             <img src="/icons/four-block.svg" alt="block" />

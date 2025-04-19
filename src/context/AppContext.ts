@@ -1,10 +1,11 @@
 import { createContext, Dispatch, useContext } from "react";
 import { PokemonAction } from "./pokemon/reducer";
 import { State } from "./AppProvider";
+import { ConfigReducerAction } from "./config/reducer";
 
 type AppContextType = {
   state: State;
-  dispatch: Dispatch<PokemonAction>;
+  dispatch: Dispatch<PokemonAction | ConfigReducerAction>;
 };
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
