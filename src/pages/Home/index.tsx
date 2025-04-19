@@ -22,6 +22,15 @@ function Home() {
   const [errorGetAllData, setErrorGetAllData] = useState("");
 
   const fetchPokemonData = async () => {
+    const currentLocalStorageData = localStorage.getItem("pokeList");
+    if (currentLocalStorageData) {
+      dispatch({
+        type: "SET_POKEMON_DATA",
+        payload: JSON.parse(currentLocalStorageData),
+      });
+      handleSetPageData();
+      return;
+    }
     setIsLoading(true);
     try {
       const response: GetAllPokemonResponse = await getAllPokemon({
@@ -30,7 +39,6 @@ function Home() {
       });
       dispatch({ type: "SET_POKEMON_DATA", payload: response });
       localStorage.setItem("pokeList", JSON.stringify(response));
-
       handleSetPageData();
     } catch (error) {
       setErrorGetAllData(error as string);
